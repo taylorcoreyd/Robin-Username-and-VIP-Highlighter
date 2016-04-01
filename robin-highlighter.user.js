@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Robin Highlighter
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.1
 // @description  Highlights your username in Robin chats!
 // @author       Chr12t0pher
 // @include      https://www.reddit.com/robin*
@@ -11,7 +11,7 @@
 (function () {
     'use strict';
 
-    var username = $("span.user").find("a").text().toLowerCase();
+    var username = $("span.user").find("a").first().text().toLowerCase();
 
     $("#robinChatMessageList").bind("DOMNodeInserted", function() {
         var x = $("#robinChatMessageList .robin-message").last();
@@ -19,5 +19,5 @@
         if (message.text().toLowerCase() == username) {
             message.css("background-color", "yellow");
         }
-    })
-})
+    });
+});
