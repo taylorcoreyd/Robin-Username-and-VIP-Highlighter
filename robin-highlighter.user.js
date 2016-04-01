@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Robin Highlighter
-// @namespace    http://tampermonkey.net/
+// @namespace    http://cstevens.biz
 // @version      0.1.2
 // @description  Highlights your username in Robin chats!
 // @author       Chr12t0pher
