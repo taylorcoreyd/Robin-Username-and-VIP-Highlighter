@@ -14,7 +14,7 @@ var username = $("span.user").find("a").first().text().toLowerCase();
 $("#robinChatMessageList").bind("DOMNodeInserted", function() {
     var x = $("#robinChatMessageList .robin-message").last();
     var message = x.find(".robin-message--message");
-    if (message.text().toLowerCase() == username) {
+    if (message.text().toLowerCase().search(username) != -1) {
         message.css("background-color", "yellow");
     }
 });
