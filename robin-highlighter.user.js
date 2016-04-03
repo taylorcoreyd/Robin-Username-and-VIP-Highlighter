@@ -18,21 +18,17 @@ $("#robinChatMessageList").bind("DOMNodeInserted", function() {
 
     var x = $("#robinChatMessageList .robin-message").last();
     var message = x.find(".robin-message--message");
-<<<<<<< Updated upstream
-    if (message.text().toLowerCase().search(username) != -1) {
-=======
     var lastUser = x.find(".robin-message--from.robin--username");
 
     // highlight our username
-    if (message.text().toLowerCase() == username) {
->>>>>>> Stashed changes
+    if (message.text().toLowerCase().search(username) != -1) {
         message.css("background-color", "yellow");
     }
 
     // Highlight saved users.
     for(var i in vips) {
       if (lastUser.text().toLowerCase() == vips[i]) {
-        message.css("background-color", "#b3ffb3")
+        message.css("background-color", "#b3ffb3");
       }
     }
 });
@@ -41,14 +37,16 @@ var inputBox = $(document).find(".c-form-control.text-counter-input");
 // on input = whenever user types in or makes some change.
 inputBox.on("input", function() {
     // Looking for command
-    var command = ".vip ";
+    var vipAdd = ".vip ";
+    var vipRemove = ".vipr ";
+    var vipClear = ".vipc";
     var cmdExec = "!";
 
     // Get the value from the inputBox
     var inVal = $( this ).val();
 
-    // If command is found
-    if (inVal.substring(0, 5) == command && inVal.slice(-1) == cmdExec) {
+    // If vipAdd command is found
+    if (inVal.substring(0, 5) == vipAdd && inVal.slice(-1) == cmdExec) {
         // get username
         var vip = inVal.substring(5, inVal.length - 1);
         vips.push(vip.toLowerCase());
@@ -56,5 +54,26 @@ inputBox.on("input", function() {
 
         // clear the command
         $( this ).val("");
+    }
+
+    // If vipRemove command is found
+    if (inVal.substring(0, 6) == vipRemove && inVal.slice(-1) == cmdExec) {
+        // get username
+        var vip = inVal.substring(6, inVal.length - 1);
+        var i = vips.indexOf(vip);
+        if (i != -1) {
+          vips.splice(i, 1);
+        }
+        console.log("removed from vips: " + vip);
+
+        // clear the command
+        $( this ).val("");
+    }
+
+    // If vipClear command is found
+    if (inVal == vipClear + cmdExec) {
+      vips = [];
+      console.log("cleared vips");
+      $( this ).val("");
     }
 });
