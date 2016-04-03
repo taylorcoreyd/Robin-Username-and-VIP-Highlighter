@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Robin Username and VIP Highlighter
 // @namespace    https://github.com/taylorcoreyd
-// @version      0.3.0
+// @version      1.0.0
 // @description  Highlights your username in Robin chats!
 // @author       cdtdev
 // @include      https://www.reddit.com/robin*
@@ -18,12 +18,22 @@ if (vips == null) {
   vips = [];
 }
 
+var lastMessageUser = "";
+var isLastUser = false;
+
 var username = $("span.user").find("a").first().text().toLowerCase();
 $("#robinChatMessageList").bind("DOMNodeInserted", function() {
 
     var x = $("#robinChatMessageList .robin-message").last();
     var message = x.find(".robin-message--message");
     var lastUser = x.find(".robin-message--from.robin--username");
+
+    if (lastUser.exists()) {
+      lastMessageUser = lastUser.text().toLowerCase();
+      isLastUser = true;
+    } else {
+      isLastUser = false;
+    }
 
     // highlight our username
     if (message.text().toLowerCase().search(username) != -1) {
@@ -36,6 +46,9 @@ $("#robinChatMessageList").bind("DOMNodeInserted", function() {
         message.css("background-color", "#b3ffb3");
       }
       if (message.text().toLowerCase().search(vips[i]) != -1) {
+        message.css("background-color", "#b3ffb3");
+      }
+      if (!isLastUser && lastMessageUser == vips[i]) {
         message.css("background-color", "#b3ffb3");
       }
     }
@@ -70,7 +83,7 @@ inputBox.on("input", function() {
     if (inVal.substring(0, 6) == vipRemove && inVal.slice(-1) == cmdExec) {
         // get username
         var vip = inVal.substring(6, inVal.length - 1);
-        var i = vips.indexOf(vip);
+        var i = vips.indexOf(vip.toLowerCase());
         if (i != -1) {
           vips.splice(i, 1);
         }
@@ -94,4 +107,8 @@ inputBox.on("input", function() {
 
 function saveVips() {
   localStorage.setItem("vips", JSON.stringify(vips));
+}
+
+$.fn.exists = function () {
+  return this.length !== 0;
 }
