@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Robin Highlighter
-// @namespace    http://cstevens.biz
-// @version      0.1.2
+// @name         Robin Username and VIP Highlighter
+// @namespace    https://github.com/taylorcoreyd
+// @version      0.3.0
 // @description  Highlights your username in Robin chats!
-// @author       Chr12t0pher
+// @author       cdtdev
 // @include      https://www.reddit.com/robin*
 // @grant        none
 // ==/UserScript==
@@ -11,7 +11,12 @@
 
 'use strict';
 
-var vips = []
+// get saved vips
+var vips = JSON.parse(localStorage.getItem("vips"));
+// if there are no saved VIPs, then create an empty VIP list.
+if (vips == null) {
+  vips = [];
+}
 
 var username = $("span.user").find("a").first().text().toLowerCase();
 $("#robinChatMessageList").bind("DOMNodeInserted", function() {
@@ -28,6 +33,9 @@ $("#robinChatMessageList").bind("DOMNodeInserted", function() {
     // Highlight saved users.
     for(var i in vips) {
       if (lastUser.text().toLowerCase() == vips[i]) {
+        message.css("background-color", "#b3ffb3");
+      }
+      if (message.text().toLowerCase().search(vips[i]) != -1) {
         message.css("background-color", "#b3ffb3");
       }
     }
@@ -54,6 +62,8 @@ inputBox.on("input", function() {
 
         // clear the command
         $( this ).val("");
+
+        saveVips();
     }
 
     // If vipRemove command is found
@@ -68,6 +78,8 @@ inputBox.on("input", function() {
 
         // clear the command
         $( this ).val("");
+
+        saveVips();
     }
 
     // If vipClear command is found
@@ -75,5 +87,11 @@ inputBox.on("input", function() {
       vips = [];
       console.log("cleared vips");
       $( this ).val("");
+
+      saveVips();
     }
 });
+
+function saveVips() {
+  localStorage.setItem("vips", JSON.stringify(vips));
+}
